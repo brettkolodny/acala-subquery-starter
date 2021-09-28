@@ -1,0 +1,13 @@
+type TokenTransfer @entity {
+
+  id: ID! #id is a required field
+
+  to: String!
+  
+  from: String!
+
+  amount: BigInt!
+
+  token: String!
+
+}
