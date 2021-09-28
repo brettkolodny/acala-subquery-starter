@@ -15,24 +15,25 @@ Make sure you have the pre-requisite software installed by following the directi
 4. Build the project by running `yarn build`
 5. Start the prooject by running `docker-compose pull && docker-compose up`
 
-#### Query the project
+### Query the project
 
 Open your browser and head to `http://localhost:3000`.
 
-Finally, you should see a GraphQL playground is showing in the explorer and the schemas that ready to query.
-
-For the `subql-starter` project, you can try to query with the following code to get a taste of how it works.
+Write the following query into the query editor and press play. If you see data pop up on the right side then you're all set up! 
 
 ```graphql
-query{
-  starterEntities(first:10){
-    nodes{
-      field1
-      field2
-      field3
-      field4
-      field5
+query {
+  tokenTransfers(first: 10) {
+    nodes {
+      to
+      from
+      amount
+      token
     }
   }
 }
 ```
+
+## Next Steps
+
+This project is just to get you started building with Subquery for Acala/Karura. You'll want to read through the [Subquery docs](https://doc.subquery.network/) for more information on how to build out your own custom handlers.
