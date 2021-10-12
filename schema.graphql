@@ -1,13 +1,25 @@
-type TokenTransfer @entity {
+type Account @entity {
+  id: ID!
+  
+  balances: [AccountBalance] @derivedFrom(field: "account")
+}
+
+type AccountBalance @entity {
 
   id: ID! #id is a required field
 
-  to: String!
-  
-  from: String!
+  account: Account!
 
-  amount: BigInt!
+  balance: BigInt!
 
-  token: String!
+  currency: String!
 
 }
+
+# type CurrencyPrice @entity {
+  
+#   currency: ID!
+
+#   averagePrice: String!
+  
+# }

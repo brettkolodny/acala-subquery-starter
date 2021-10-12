@@ -3318,8 +3318,8 @@ dataSources:
     startBlock: 100000
     mapping:
       handlers:
-        - handler: handleCurrencyTransferEvent
+        - handler: handleAccountEvent
           kind: substrate/EventHandler
-          filter:
-            module: currencies
-            method: Transferred
+          # filter:
+          #   module: currencies
+          #   method: Transferred
