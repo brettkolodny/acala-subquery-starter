@@ -1,16 +1,19 @@
 import { SubstrateEvent } from "@subql/types";
 import { AccountBalance, Account } from "../types";
+import { Codec } from "@polkadot/types/types";
 import { Balance } from "@polkadot/types/interfaces";
 
 async function getAccountBalance(address: string, currency: string): Promise<AccountBalance> {
 
   let accountBalance = await AccountBalance.get(address + currency);
+  // creates an account balance if it doesn't already exist
   if (!accountBalance) {
     accountBalance = new AccountBalance(address + currency);
     // init balance of 0 and assign currency
     accountBalance.accountId = address;
     accountBalance.balance = BigInt(0);
     accountBalance.currency = currency;
+
     await accountBalance.save();
   }
 
@@ -27,13 +30,28 @@ async function getAccount(address: string): Promise<Account> {
   return account;
 }
 
-function update_balance(accountBalance: AccountBalance, to_from: string, amount: string): void {
+async function update_balance(accountBalance: AccountBalance, to_from: string, amount: string): Promise<void> {
   if (to_from == 'from') {
     accountBalance.balance -= BigInt(amount);
   } else {
     accountBalance.balance += BigInt(amount);
   }
+  
+  await accountBalance.save()
+
   return
+}
+
+function getToken(currencyId: Codec): string[] {
+  const currencyJson = JSON.parse(currencyId.toString());
+
+  if (currencyJson.token) return [currencyJson.token, currencyJson.token];
+  if (currencyJson.dexShare) {
+    const [tokenA, tokenB] = currencyJson.dexShare;
+    return [tokenA, tokenB];
+  }
+
+  return [];
 }
 
 export async function handleAccountEvent(event: SubstrateEvent): Promise<void> {
@@ -42,47 +60,24 @@ export async function handleAccountEvent(event: SubstrateEvent): Promise<void> {
     return;
   }
 
+  // convert events
   const { 
     event: {
       data: [currency, from, to, amount],
     },
   } = event;
 
-  // const currencyJson = JSON.parse(currency.toString());
+  let [currencyFrom, currencyTo] = getToken(currency);
 
+  let fromAccount = await getAccount(from.toString());
+  let toAccount = await getAccount(to.toString());
 
-  // function getToken(currencyId: Codec): string {
-  //   const currencyJson = JSON.parse(currencyId.toString());
-  
-  //   if (currencyJson.token) return currencyJson.token;
-  //   if (currencyJson.dexShare) {
-  //     const [tokenA, tokenB] = currencyJson.dexShare;
-  //     return `${tokenA.token}<>${tokenB.token} LP`;
-  //   }
-  
-  //   return "??";
-  // }
+  let fromAccountBalance = await getAccountBalance(from.toString(), currencyFrom);
+  let toAccountBalance = await getAccountBalance(to.toString(), currencyTo);
 
+  await update_balance(fromAccountBalance, 'from', amount.toString());
+  await update_balance(toAccountBalance, 'to', amount.toString());
 
-  let from_acc = await getAccount(from.toString());
-  let to_acc = await getAccount(to.toString());
-
-  let from_account = await getAccountBalance(from.toString(), currency.toString());
-  let to_account = await getAccountBalance(to.toString(), currency.toString());
-
-  update_balance(from_account, 'from', amount.toString());
-  update_balance(to_account, 'to', amount.toString());
-
-  await from_account.save();
-  await to_account.save();
-  await from_acc.save();
-  await to_acc.save();
-
-  // getAccountBalance(from.toString(), currency.toString())
-  //   .then(account => update_balance(account, 'from', amount.toString()),
-  //     e => console.log(e));
-
-  // getAccountBalance(to.toString(), currency.toString())
-  //   .then(account => update_balance(account, 'to', amount.toString()),
-  //     e => console.log(e));
+  await fromAccount.save();
+  await toAccount.save();
 }
