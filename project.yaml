@@ -4,7 +4,7 @@ repository: ''
 schema: ./schema.graphql
 network:
   endpoint: wss://acala-mandala.api.onfinality.io/public-ws
-  typesAlias: &ref_57
+  typesAlias: &ref_61
     stakingPool:
       Phase: StakingPoolPhase
     nomineesElection:
@@ -16,13 +16,15 @@ network:
       OrmlCurrencyId: CurrencyId
     oracle:
       DataProviderId: AcalaDataProviderId
+    chainBridge:
+      ChainId: ChainBridgeChainId
     tokens:
       AccountData: OrmlAccountData
       BalanceLock: OrmlBalanceLock
   typesBundle:
     spec:
       acala:
-        rpc: &ref_58
+        rpc: &ref_62
           oracle:
             getValue:
               description: Retrieves the oracle value for a given key.
@@ -137,7 +139,7 @@ network:
           council:
             - generalCouncil
         types:
-          - minmax:
+          - minmax: &ref_63
               - 600
               - 699
             types:
@@ -203,7 +205,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
+              TokenSymbol: &ref_64
                 _enum:
                   - ACA
                   - AUSD
@@ -220,7 +222,7 @@ network:
                   Token: TokenSymbol
                   DEXShare: (DexShare, DexShare)
                   ERC20: EvmAddress
-                  ChainSafe: '[u8; 32]'
+                  StableAssetPoolToken: StableAssetPoolId
               CurrencyIdOf: CurrencyId
               AirDropCurrencyId: &ref_13
                 _enum:
@@ -239,6 +241,7 @@ network:
                   - Acala
                   - Band
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: &ref_16
                 refundRecipient: AccountId
@@ -340,7 +343,9 @@ network:
               PoolId: &ref_38
                 _enum:
                   Loans: CurrencyId
-                  Dex: CurrencyId
+                  DexIncentive: CurrencyId
+                  DexSaving: CurrencyId
+                  Homa: 'Null'
               PoolIdV0: &ref_39
                 _enum:
                   LoansIncentive: CurrencyId
@@ -401,6 +406,7 @@ network:
                   - Swap
                   - Loan
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: &ref_49
                 bonded: Balance
                 available: Balance
@@ -440,13 +446,14 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
               Address: LookupSource
               LookupSource: IndicesLookupSource
-          - minmax:
+          - minmax: &ref_65
               - 700
               - 719
             types:
@@ -482,7 +489,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
+              TokenSymbol: &ref_66
                 _enum:
                   - ACA
                   - AUSD
@@ -497,6 +504,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -548,6 +556,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -562,15 +571,16 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
               Address: GenericMultiAddress
               LookupSource: GenericMultiAddress
-          - minmax:
+          - minmax: &ref_67
               - 720
-              - null
+              - 722
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -604,7 +614,550 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol: &ref_56
+              TokenSymbol: &ref_68
+                _enum:
+                  ACA: 0
+                  AUSD: 1
+                  DOT: 2
+                  LDOT: 3
+                  XBTC: 4
+                  RENBTC: 5
+                  POLKABTC: 6
+                  PLM: 7
+                  PHA: 8
+                  HDT: 9
+                  BCG: 11
+                  KAR: 128
+                  KUSD: 129
+                  KSM: 130
+                  LKSM: 131
+                  SDN: 135
+                  KILT: 138
+              DexShare: *ref_11
+              CurrencyId: &ref_56
+                _enum:
+                  Token: TokenSymbol
+                  DEXShare: (TokenSymbol, TokenSymbol)
+                  ERC20: EvmAddress
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_38
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: &ref_69
+              - 723
+              - 729
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: &ref_57
+                totalShares: Compact<Share>
+                totalRewards: Compact<Balance>
+                totalWithdrawnRewards: Compact<Balance>
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: &ref_70
+                _enum:
+                  ACA: 0
+                  AUSD: 1
+                  DOT: 2
+                  LDOT: 3
+                  XBTC: 4
+                  RENBTC: 5
+                  POLKABTC: 6
+                  PLM: 7
+                  PHA: 8
+                  HDT: 9
+                  BCG: 11
+                  KAR: 128
+                  KUSD: 129
+                  KSM: 130
+                  LKSM: 131
+                  SDN: 135
+                  KILT: 138
+              DexShare: *ref_11
+              CurrencyId: *ref_56
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: &ref_58
+                _enum:
+                  LoansIncentive: CurrencyId
+                  DexIncentive: CurrencyId
+                  HomaIncentive: 'Null'
+                  DexSaving: CurrencyId
+                  HomaValidatorAllowance: AccountId
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: &ref_71
+              - 730
+              - 1007
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: &ref_72
+                _enum:
+                  ACA: 0
+                  AUSD: 1
+                  DOT: 2
+                  LDOT: 3
+                  RENBTC: 4
+                  KAR: 128
+                  KUSD: 129
+                  KSM: 130
+                  LKSM: 131
+                  CASH: 140
+              DexShare: *ref_11
+              CurrencyId: *ref_12
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: &ref_73
+              - 1008
+              - 1008
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: &ref_74
+                _enum:
+                  ACA: 0
+                  AUSD: 1
+                  DOT: 2
+                  LDOT: 3
+                  RENBTC: 20
+                  CASH: 21
+                  KAR: 128
+                  KUSD: 129
+                  KSM: 130
+                  LKSM: 131
+              DexShare: *ref_11
+              CurrencyId: *ref_12
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: &ref_75
+              - 1008
+              - 1009
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: &ref_59
                 _enum:
                   ACA: 0
                   AUSD: 1
@@ -617,6 +1170,7 @@ network:
                   KSM: 130
                   LKSM: 131
                   BNC: 168
+                  VSKSM: 169
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -624,6 +1178,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -652,7 +1207,7 @@ network:
               SlashInfo: *ref_35
               ValidatorBacking: *ref_36
               Guarantee: *ref_37
-              PoolId: *ref_38
+              PoolId: *ref_58
               PoolIdV0: *ref_39
               Position: *ref_40
               CID: Vec<u8>
@@ -675,6 +1230,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -689,20 +1245,16 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
               Address: GenericMultiAddress
               LookupSource: GenericMultiAddress
-              AssetInstance: AssetInstanceV0
               MultiLocation: MultiLocationV0
               MultiAsset: MultiAssetV0
               Xcm: XcmV0
               XcmOrder: XcmOrderV0
-          - minmax:
-              - 600
-              - 722
+          - minmax: &ref_76
+              - 1010
+              - 1013
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -736,7 +1288,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol: *ref_56
+              TokenSymbol: *ref_59
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -744,6 +1296,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -772,12 +1325,10 @@ network:
               SlashInfo: *ref_35
               ValidatorBacking: *ref_36
               Guarantee: *ref_37
-              PoolId:
+              PoolId: &ref_60
                 _enum:
                   Loans: CurrencyId
-                  DexIncentive: CurrencyId
-                  DexSaving: CurrencyId
-                  Homa: 'Null'
+                  Dex: CurrencyId
               PoolIdV0: *ref_39
               Position: *ref_40
               CID: Vec<u8>
@@ -800,6 +1351,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -814,13 +1366,16 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-          - minmax:
-              - 719
-              - 729
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: &ref_77
+              - 1014
+              - null
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -854,153 +1409,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  XBTC: 4
-                  RENBTC: 5
-                  POLKABTC: 6
-                  PLM: 7
-                  PHA: 8
-                  HDT: 9
-                  BCG: 11
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
-                  SDN: 135
-                  KILT: 138
-              DexShare: *ref_11
-              CurrencyId:
-                _enum:
-                  Token: TokenSymbol
-                  DEXShare: (TokenSymbol, TokenSymbol)
-                  ERC20: EvmAddress
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId: *ref_38
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-          - minmax:
-              - 730
-              - 1007
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo: *ref_9
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  RENBTC: 4
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
-                  CASH: 140
+              TokenSymbol: *ref_59
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -1008,6 +1417,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -1036,7 +1446,7 @@ network:
               SlashInfo: *ref_35
               ValidatorBacking: *ref_36
               Guarantee: *ref_37
-              PoolId: *ref_38
+              PoolId: *ref_60
               PoolIdV0: *ref_39
               Position: *ref_40
               CID: Vec<u8>
@@ -1059,6 +1469,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -1073,266 +1484,21 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-          - minmax:
-              - 1008
-              - 1008
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo: *ref_9
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  RENBTC: 20
-                  CASH: 21
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
-              DexShare: *ref_11
-              CurrencyId: *ref_12
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId: *ref_38
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-          - minmax:
-              - 723
-              - 1009
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo:
-                totalShares: Compact<Share>
-                totalRewards: Compact<Balance>
-                totalWithdrawnRewards: Compact<Balance>
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol: *ref_56
-              DexShare: *ref_11
-              CurrencyId: *ref_12
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId:
-                _enum:
-                  LoansIncentive: CurrencyId
-                  DexIncentive: CurrencyId
-                  HomaIncentive: 'Null'
-                  DexSaving: CurrencyId
-                  HomaValidatorAllowance: AccountId
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-        alias: *ref_57
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV1
+              MultiAsset: MultiAssetV1
+              Xcm: XcmV1
+              XcmOrder: XcmOrderV1
+        alias: *ref_61
       mandala:
-        rpc: *ref_58
+        rpc: *ref_62
         instances:
           council:
             - generalCouncil
         types:
-          - minmax:
-              - 600
-              - 699
+          - minmax: *ref_63
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -1366,14 +1532,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  - ACA
-                  - AUSD
-                  - DOT
-                  - XBTC
-                  - LDOT
-                  - RENBTC
+              TokenSymbol: *ref_64
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -1381,6 +1540,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -1432,6 +1592,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -1446,257 +1607,14 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-              Address: LookupSource
-              LookupSource: IndicesLookupSource
-          - minmax:
-              - 700
-              - 719
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo: *ref_9
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  - ACA
-                  - AUSD
-                  - DOT
-                  - XBTC
-                  - LDOT
-                  - RENBTC
-              DexShare: *ref_11
-              CurrencyId: *ref_12
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId: *ref_38
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-              Address: GenericMultiAddress
-              LookupSource: GenericMultiAddress
-          - minmax:
-              - 720
-              - null
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo: *ref_9
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol: *ref_56
-              DexShare: *ref_11
-              CurrencyId: *ref_12
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId: *ref_38
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-              Address: GenericMultiAddress
-              LookupSource: GenericMultiAddress
-              AssetInstance: AssetInstanceV0
               MultiLocation: MultiLocationV0
               MultiAsset: MultiAssetV0
               Xcm: XcmV0
               XcmOrder: XcmOrderV0
-          - minmax:
-              - 600
-              - 722
+              Address: LookupSource
+              LookupSource: IndicesLookupSource
+          - minmax: *ref_65
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -1730,7 +1648,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol: *ref_56
+              TokenSymbol: *ref_66
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -1738,146 +1656,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId:
-                _enum:
-                  Loans: CurrencyId
-                  DexIncentive: CurrencyId
-                  DexSaving: CurrencyId
-                  Homa: 'Null'
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-          - minmax:
-              - 719
-              - 729
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo: *ref_9
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  XBTC: 4
-                  RENBTC: 5
-                  POLKABTC: 6
-                  PLM: 7
-                  PHA: 8
-                  HDT: 9
-                  BCG: 11
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
-                  SDN: 135
-                  KILT: 138
-              DexShare: *ref_11
-              CurrencyId:
-                _enum:
-                  Token: TokenSymbol
-                  DEXShare: (TokenSymbol, TokenSymbol)
-                  ERC20: EvmAddress
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -1929,6 +1708,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -1943,13 +1723,14 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-          - minmax:
-              - 730
-              - 1007
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+          - minmax: *ref_67
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -1983,25 +1764,15 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  RENBTC: 4
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
-                  CASH: 140
+              TokenSymbol: *ref_68
               DexShare: *ref_11
-              CurrencyId: *ref_12
+              CurrencyId: *ref_56
               CurrencyIdOf: CurrencyId
               AirDropCurrencyId: *ref_13
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -2053,6 +1824,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -2067,13 +1839,478 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-          - minmax:
-              - 1008
-              - 1008
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_69
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: *ref_70
+              DexShare: *ref_11
+              CurrencyId: *ref_56
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_71
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: *ref_72
+              DexShare: *ref_11
+              CurrencyId: *ref_12
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_73
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: *ref_74
+              DexShare: *ref_11
+              CurrencyId: *ref_12
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_75
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: *ref_59
+              DexShare: *ref_11
+              CurrencyId: *ref_12
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_76
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -2107,18 +2344,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  RENBTC: 20
-                  CASH: 21
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
+              TokenSymbol: *ref_59
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -2126,6 +2352,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -2154,7 +2381,7 @@ network:
               SlashInfo: *ref_35
               ValidatorBacking: *ref_36
               Guarantee: *ref_37
-              PoolId: *ref_38
+              PoolId: *ref_60
               PoolIdV0: *ref_39
               Position: *ref_40
               CID: Vec<u8>
@@ -2177,6 +2404,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -2191,13 +2419,14 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-          - minmax:
-              - 723
-              - 1009
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_77
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -2222,10 +2451,7 @@ network:
               OrmlVestingSchedule: *ref_8
               VestingScheduleOf: OrmlVestingSchedule
               OrmlCurrencyId: CurrencyId
-              PoolInfo:
-                totalShares: Compact<Share>
-                totalRewards: Compact<Balance>
-                totalWithdrawnRewards: Compact<Balance>
+              PoolInfo: *ref_9
               CompactBalance: Compact<Balance>
               PoolInfoV0: *ref_10
               Share: u128
@@ -2234,7 +2460,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol: *ref_56
+              TokenSymbol: *ref_59
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -2242,6 +2468,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -2270,13 +2497,7 @@ network:
               SlashInfo: *ref_35
               ValidatorBacking: *ref_36
               Guarantee: *ref_37
-              PoolId:
-                _enum:
-                  LoansIncentive: CurrencyId
-                  DexIncentive: CurrencyId
-                  HomaIncentive: 'Null'
-                  DexSaving: CurrencyId
-                  HomaValidatorAllowance: AccountId
+              PoolId: *ref_60
               PoolIdV0: *ref_39
               Position: *ref_40
               CID: Vec<u8>
@@ -2299,6 +2520,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -2313,20 +2535,21 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-        alias: *ref_57
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV1
+              MultiAsset: MultiAssetV1
+              Xcm: XcmV1
+              XcmOrder: XcmOrderV1
+        alias: *ref_61
       karura:
-        rpc: *ref_58
+        rpc: *ref_62
         instances:
           council:
             - generalCouncil
         types:
-          - minmax:
-              - 600
-              - 699
+          - minmax: *ref_63
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -2360,14 +2583,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  - ACA
-                  - AUSD
-                  - DOT
-                  - XBTC
-                  - LDOT
-                  - RENBTC
+              TokenSymbol: *ref_64
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -2375,6 +2591,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -2426,6 +2643,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -2440,257 +2658,14 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-              Address: LookupSource
-              LookupSource: IndicesLookupSource
-          - minmax:
-              - 700
-              - 719
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo: *ref_9
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  - ACA
-                  - AUSD
-                  - DOT
-                  - XBTC
-                  - LDOT
-                  - RENBTC
-              DexShare: *ref_11
-              CurrencyId: *ref_12
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId: *ref_38
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-              Address: GenericMultiAddress
-              LookupSource: GenericMultiAddress
-          - minmax:
-              - 720
-              - null
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo: *ref_9
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol: *ref_56
-              DexShare: *ref_11
-              CurrencyId: *ref_12
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId: *ref_38
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-              Address: GenericMultiAddress
-              LookupSource: GenericMultiAddress
-              AssetInstance: AssetInstanceV0
               MultiLocation: MultiLocationV0
               MultiAsset: MultiAssetV0
               Xcm: XcmV0
               XcmOrder: XcmOrderV0
-          - minmax:
-              - 600
-              - 722
+              Address: LookupSource
+              LookupSource: IndicesLookupSource
+          - minmax: *ref_65
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -2724,7 +2699,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol: *ref_56
+              TokenSymbol: *ref_66
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -2732,146 +2707,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
-              PalletBalanceOf: Balance
-              CollateralAuctionItem: *ref_16
-              DebitAuctionItem: *ref_17
-              SurplusAuctionItem: *ref_18
-              LiquidationStrategy: *ref_19
-              OptionRate: Option<Rate>
-              OptionRatio: Option<Ratio>
-              ChangeOptionRate: *ref_20
-              ChangeOptionRatio: *ref_21
-              ChangeBalance: *ref_22
-              RiskManagementParams: *ref_23
-              CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters: *ref_24
-              BalanceWrapper: *ref_25
-              BalanceRequest: *ref_26
-              TradingPairStatus: *ref_27
-              Erc20Info: *ref_28
-              EstimateResourcesResponse: *ref_29
-              EvmAccountInfo: *ref_30
-              CodeInfo: *ref_31
-              EvmContractInfo: *ref_32
-              EvmAddress: H160
-              CallRequest: *ref_33
-              RedeemStrategy: *ref_34
-              RelaychainAccountId: AccountId
-              SlashInfo: *ref_35
-              ValidatorBacking: *ref_36
-              Guarantee: *ref_37
-              PoolId:
-                _enum:
-                  Loans: CurrencyId
-                  DexIncentive: CurrencyId
-                  DexSaving: CurrencyId
-                  Homa: 'Null'
-              PoolIdV0: *ref_39
-              Position: *ref_40
-              CID: Vec<u8>
-              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf: *ref_41
-              Properties: *ref_42
-              ClassData: *ref_43
-              TokenData: *ref_44
-              TokenId: u64
-              TokenIdOf: TokenId
-              NFTClassId: u32
-              ClassIdOf: ClassId
-              NFTBalance: u128
-              NFTBalanceOf: NFTBalance
-              ClassInfoOf: *ref_45
-              NomineeId: AccountId
-              HomaUnlockChunk: *ref_46
-              BondingLedger: *ref_47
-              OracleKey: CurrencyId
-              AsOriginId: AuthoritysOriginId
-              ProxyType: *ref_48
-              AtLeast64BitUnsigned: u128
-              SubAccountStatus: *ref_49
-              Params: *ref_50
-              StakingPoolPhase: *ref_51
-              Ledger: *ref_52
-              ChangeRate: *ref_53
-              ChangeRatio: *ref_54
-              BalanceInfo: *ref_55
-              PolkadotAccountId: AccountId
-              PolkadotAccountIdOf: PolkadotAccountId
-              ExchangeRate: FixedU128
-              Rate: FixedU128
-              Ratio: FixedU128
-              PublicKey: '[u8; 20]'
-              DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
-              Keys: SessionKeys1
-          - minmax:
-              - 719
-              - 729
-            types:
-              CallOf: Call
-              DispatchTime: *ref_0
-              ScheduleTaskIndex: u32
-              DelayedOrigin: *ref_1
-              AuthorityOrigin: DelayedOrigin
-              StorageValue: Vec<u8>
-              GraduallyUpdate: *ref_2
-              StorageKeyBytes: Vec<u8>
-              StorageValueBytes: Vec<u8>
-              RpcDataProviderId: Text
-              DataProviderId: u8
-              TimestampedValue: *ref_3
-              TimestampedValueOf: TimestampedValue
-              OrderedSet: Vec<AccountId>
-              OrmlAccountData: *ref_4
-              OrmlBalanceLock: *ref_5
-              AuctionInfo: *ref_6
-              DelayedDispatchTime: *ref_7
-              DispatchId: u32
-              Price: FixedU128
-              OrmlVestingSchedule: *ref_8
-              VestingScheduleOf: OrmlVestingSchedule
-              OrmlCurrencyId: CurrencyId
-              PoolInfo: *ref_9
-              CompactBalance: Compact<Balance>
-              PoolInfoV0: *ref_10
-              Share: u128
-              OracleValue: Price
-              Amount: i128
-              AmountOf: Amount
-              AuctionId: u32
-              AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  XBTC: 4
-                  RENBTC: 5
-                  POLKABTC: 6
-                  PLM: 7
-                  PHA: 8
-                  HDT: 9
-                  BCG: 11
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
-                  SDN: 135
-                  KILT: 138
-              DexShare: *ref_11
-              CurrencyId:
-                _enum:
-                  Token: TokenSymbol
-                  DEXShare: (TokenSymbol, TokenSymbol)
-                  ERC20: EvmAddress
-              CurrencyIdOf: CurrencyId
-              AirDropCurrencyId: *ref_13
-              AuthoritysOriginId: *ref_14
-              AcalaDataProviderId: *ref_15
-              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -2923,6 +2759,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -2937,13 +2774,14 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-          - minmax:
-              - 730
-              - 1007
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+          - minmax: *ref_67
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -2977,25 +2815,15 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  RENBTC: 4
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
-                  CASH: 140
+              TokenSymbol: *ref_68
               DexShare: *ref_11
-              CurrencyId: *ref_12
+              CurrencyId: *ref_56
               CurrencyIdOf: CurrencyId
               AirDropCurrencyId: *ref_13
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -3047,6 +2875,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -3061,13 +2890,478 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-          - minmax:
-              - 1008
-              - 1008
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_69
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: *ref_70
+              DexShare: *ref_11
+              CurrencyId: *ref_56
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_71
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: *ref_72
+              DexShare: *ref_11
+              CurrencyId: *ref_12
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_73
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: *ref_74
+              DexShare: *ref_11
+              CurrencyId: *ref_12
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_75
+            types:
+              CallOf: Call
+              DispatchTime: *ref_0
+              ScheduleTaskIndex: u32
+              DelayedOrigin: *ref_1
+              AuthorityOrigin: DelayedOrigin
+              StorageValue: Vec<u8>
+              GraduallyUpdate: *ref_2
+              StorageKeyBytes: Vec<u8>
+              StorageValueBytes: Vec<u8>
+              RpcDataProviderId: Text
+              DataProviderId: u8
+              TimestampedValue: *ref_3
+              TimestampedValueOf: TimestampedValue
+              OrderedSet: Vec<AccountId>
+              OrmlAccountData: *ref_4
+              OrmlBalanceLock: *ref_5
+              AuctionInfo: *ref_6
+              DelayedDispatchTime: *ref_7
+              DispatchId: u32
+              Price: FixedU128
+              OrmlVestingSchedule: *ref_8
+              VestingScheduleOf: OrmlVestingSchedule
+              OrmlCurrencyId: CurrencyId
+              PoolInfo: *ref_57
+              CompactBalance: Compact<Balance>
+              PoolInfoV0: *ref_10
+              Share: u128
+              OracleValue: Price
+              Amount: i128
+              AmountOf: Amount
+              AuctionId: u32
+              AuctionIdOf: AuctionId
+              TokenSymbol: *ref_59
+              DexShare: *ref_11
+              CurrencyId: *ref_12
+              CurrencyIdOf: CurrencyId
+              AirDropCurrencyId: *ref_13
+              AuthoritysOriginId: *ref_14
+              AcalaDataProviderId: *ref_15
+              TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
+              PalletBalanceOf: Balance
+              CollateralAuctionItem: *ref_16
+              DebitAuctionItem: *ref_17
+              SurplusAuctionItem: *ref_18
+              LiquidationStrategy: *ref_19
+              OptionRate: Option<Rate>
+              OptionRatio: Option<Ratio>
+              ChangeOptionRate: *ref_20
+              ChangeOptionRatio: *ref_21
+              ChangeBalance: *ref_22
+              RiskManagementParams: *ref_23
+              CandidateInfoOf: CandidateInfo
+              TradingPairProvisionParameters: *ref_24
+              BalanceWrapper: *ref_25
+              BalanceRequest: *ref_26
+              TradingPairStatus: *ref_27
+              Erc20Info: *ref_28
+              EstimateResourcesResponse: *ref_29
+              EvmAccountInfo: *ref_30
+              CodeInfo: *ref_31
+              EvmContractInfo: *ref_32
+              EvmAddress: H160
+              CallRequest: *ref_33
+              RedeemStrategy: *ref_34
+              RelaychainAccountId: AccountId
+              SlashInfo: *ref_35
+              ValidatorBacking: *ref_36
+              Guarantee: *ref_37
+              PoolId: *ref_58
+              PoolIdV0: *ref_39
+              Position: *ref_40
+              CID: Vec<u8>
+              Attributes: BTreeMap<Vec<u8>, Vec<u8>>
+              TokenInfoOf: *ref_41
+              Properties: *ref_42
+              ClassData: *ref_43
+              TokenData: *ref_44
+              TokenId: u64
+              TokenIdOf: TokenId
+              NFTClassId: u32
+              ClassIdOf: ClassId
+              NFTBalance: u128
+              NFTBalanceOf: NFTBalance
+              ClassInfoOf: *ref_45
+              NomineeId: AccountId
+              HomaUnlockChunk: *ref_46
+              BondingLedger: *ref_47
+              OracleKey: CurrencyId
+              AsOriginId: AuthoritysOriginId
+              ProxyType: *ref_48
+              AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
+              SubAccountStatus: *ref_49
+              Params: *ref_50
+              StakingPoolPhase: *ref_51
+              Ledger: *ref_52
+              ChangeRate: *ref_53
+              ChangeRatio: *ref_54
+              BalanceInfo: *ref_55
+              PolkadotAccountId: AccountId
+              PolkadotAccountIdOf: PolkadotAccountId
+              ExchangeRate: FixedU128
+              Rate: FixedU128
+              Ratio: FixedU128
+              PublicKey: '[u8; 20]'
+              DestAddress: Vec<u8>
+              Keys: SessionKeys1
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_76
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -3101,18 +3395,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                _enum:
-                  ACA: 0
-                  AUSD: 1
-                  DOT: 2
-                  LDOT: 3
-                  RENBTC: 20
-                  CASH: 21
-                  KAR: 128
-                  KUSD: 129
-                  KSM: 130
-                  LKSM: 131
+              TokenSymbol: *ref_59
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -3120,6 +3403,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -3148,7 +3432,7 @@ network:
               SlashInfo: *ref_35
               ValidatorBacking: *ref_36
               Guarantee: *ref_37
-              PoolId: *ref_38
+              PoolId: *ref_60
               PoolIdV0: *ref_39
               Position: *ref_40
               CID: Vec<u8>
@@ -3171,6 +3455,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -3185,13 +3470,14 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-          - minmax:
-              - 723
-              - 1009
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV0
+              MultiAsset: MultiAssetV0
+              Xcm: XcmV0
+              XcmOrder: XcmOrderV0
+          - minmax: *ref_77
             types:
               CallOf: Call
               DispatchTime: *ref_0
@@ -3216,10 +3502,7 @@ network:
               OrmlVestingSchedule: *ref_8
               VestingScheduleOf: OrmlVestingSchedule
               OrmlCurrencyId: CurrencyId
-              PoolInfo:
-                totalShares: Compact<Share>
-                totalRewards: Compact<Balance>
-                totalWithdrawnRewards: Compact<Balance>
+              PoolInfo: *ref_9
               CompactBalance: Compact<Balance>
               PoolInfoV0: *ref_10
               Share: u128
@@ -3228,7 +3511,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol: *ref_56
+              TokenSymbol: *ref_59
               DexShare: *ref_11
               CurrencyId: *ref_12
               CurrencyIdOf: CurrencyId
@@ -3236,6 +3519,7 @@ network:
               AuthoritysOriginId: *ref_14
               AcalaDataProviderId: *ref_15
               TradingPair: (CurrencyId,  CurrencyId)
+              ChainBridgeChainId: u8
               PalletBalanceOf: Balance
               CollateralAuctionItem: *ref_16
               DebitAuctionItem: *ref_17
@@ -3264,13 +3548,7 @@ network:
               SlashInfo: *ref_35
               ValidatorBacking: *ref_36
               Guarantee: *ref_37
-              PoolId:
-                _enum:
-                  LoansIncentive: CurrencyId
-                  DexIncentive: CurrencyId
-                  HomaIncentive: 'Null'
-                  DexSaving: CurrencyId
-                  HomaValidatorAllowance: AccountId
+              PoolId: *ref_60
               PoolIdV0: *ref_39
               Position: *ref_40
               CID: Vec<u8>
@@ -3293,6 +3571,7 @@ network:
               AsOriginId: AuthoritysOriginId
               ProxyType: *ref_48
               AtLeast64BitUnsigned: u128
+              StableAssetPoolId: u32
               SubAccountStatus: *ref_49
               Params: *ref_50
               StakingPoolPhase: *ref_51
@@ -3307,11 +3586,14 @@ network:
               Ratio: FixedU128
               PublicKey: '[u8; 20]'
               DestAddress: Vec<u8>
-              DepositNonce: u64
-              ResourceId: '[u8; 32]'
-              ChainId: u8
               Keys: SessionKeys1
-        alias: *ref_57
+              Address: GenericMultiAddress
+              LookupSource: GenericMultiAddress
+              MultiLocation: MultiLocationV1
+              MultiAsset: MultiAssetV1
+              Xcm: XcmV1
+              XcmOrder: XcmOrderV1
+        alias: *ref_61
 dataSources:
   - name: main
     kind: substrate/Runtime
@@ -3320,6 +3602,6 @@ dataSources:
       handlers:
         - handler: handleAccountEvent
           kind: substrate/EventHandler
-          # filter:
-          #   module: currencies
-          #   method: Transferred
+          filter:
+            module: currencies
+            method: Transferred

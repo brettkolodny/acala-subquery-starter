@@ -1,6 +1,6 @@
 import { SubstrateEvent } from "@subql/types";
-import { AccountBalance, Account } from "../types";
 import { Codec } from "@polkadot/types/types";
+import { AccountBalance, Account, CurrencyTransfer } from "../types";
 import { Balance } from "@polkadot/types/interfaces";
 
 async function getAccountBalance(address: string, currency: string): Promise<AccountBalance> {
@@ -11,7 +11,7 @@ async function getAccountBalance(address: string, currency: string): Promise<Acc
     accountBalance = new AccountBalance(address + currency);
     // init balance of 0 and assign currency
     accountBalance.accountId = address;
-    accountBalance.balance = BigInt(0);
+    accountBalance.balance = '0';
     accountBalance.currency = currency;
 
     await accountBalance.save();
@@ -30,13 +30,20 @@ async function getAccount(address: string): Promise<Account> {
   return account;
 }
 
-async function update_balance(accountBalance: AccountBalance, to_from: string, amount: string): Promise<void> {
+async function update_balance(accountBalance: AccountBalance, to_from: string, amount: string, transferId: string): Promise<void> {
+  // Generate transfer record
+  const transferRecord = new CurrencyTransfer(`${transferId}-${to_from}`);
+  transferRecord.accountBalanceId = accountBalance.id
+
   if (to_from == 'from') {
-    accountBalance.balance -= BigInt(amount);
+    accountBalance.balance = (parseFloat(accountBalance.balance) - parseFloat(amount)).toString();
+    transferRecord.amount = (-1 * parseFloat(amount)).toString()
   } else {
-    accountBalance.balance += BigInt(amount);
+    accountBalance.balance = (parseFloat(accountBalance.balance) + parseFloat(amount)).toString();
+    transferRecord.amount = (parseFloat(amount)).toString()
   }
   
+  await transferRecord.save()
   await accountBalance.save()
 
   return
@@ -67,6 +74,8 @@ export async function handleAccountEvent(event: SubstrateEvent): Promise<void> {
     },
   } = event;
 
+  const transferId = `${event.block.block.header.number.toNumber()}-${event.idx}`
+
   let [currencyFrom, currencyTo] = getToken(currency);
 
   let fromAccount = await getAccount(from.toString());
@@ -75,8 +84,8 @@ export async function handleAccountEvent(event: SubstrateEvent): Promise<void> {
   let fromAccountBalance = await getAccountBalance(from.toString(), currencyFrom);
   let toAccountBalance = await getAccountBalance(to.toString(), currencyTo);
 
-  await update_balance(fromAccountBalance, 'from', amount.toString());
-  await update_balance(toAccountBalance, 'to', amount.toString());
+  await update_balance(fromAccountBalance, 'from', amount.toString(), transferId);
+  await update_balance(toAccountBalance, 'to', amount.toString(), transferId);
 
   await fromAccount.save();
   await toAccount.save();

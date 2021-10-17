@@ -10,16 +10,18 @@ type AccountBalance @entity {
 
   account: Account!
 
-  balance: BigInt!
+  balance: String!
 
   currency: String!
-
+  
+  transfers: [CurrencyTransfer] @derivedFrom(field: "accountBalance")
 }
 
-# type CurrencyPrice @entity {
-  
-#   currency: ID!
+type CurrencyTransfer @entity {
+  id: ID!
 
-#   averagePrice: String!
-  
-# }
+  accountBalance: AccountBalance
+
+  amount: String!
+
+}
